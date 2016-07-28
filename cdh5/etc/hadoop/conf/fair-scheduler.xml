@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <allocations>
 
-  <!-- Default running job limit pools where it is not explicitly set. -->
-  <poolMaxJobsDefault>20</poolMaxJobsDefault>
-
-  <!-- Default running job limit users where it is not explicitly set. -->
-  <userMaxJobsDefault>10</userMaxJobsDefault>
-
   <!-- Default min share preemption timeout for pools where it is not
     explicitly configured, in seconds. Requires mapred.fairscheduler.preemption
     to be set to true in your mapred-site.xml. -->
