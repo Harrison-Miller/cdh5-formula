@@ -122,7 +122,7 @@
     </property>
     <property>
         <name>yarn.scheduler.fair.preemption.cluster-utilization-threshold</name>
-        <value>0.8f</value>
+        <value>0.8</value>
     </property>
     <property>
         <name>yarn.scheduler.fair.sizebasedweight</name>
