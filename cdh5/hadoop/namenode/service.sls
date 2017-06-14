@@ -177,7 +177,7 @@ create_mapred_zone:
       - service: hadoop-mapreduce-historyserver-svc
 {% endif %}
 
-# create a user directory for each user
+# create a user directory for user
 {% set user_obj = salt['pillar.get']('user') %}
 {% set user = user_obj.username %}
 hdfs_dir_{{ user }}:
@@ -191,7 +191,6 @@ hdfs_dir_{{ user }}:
       {% if pillar.cdh5.security.enable %}
       - cmd: hdfs_kinit
       {% endif %}
-{% endfor %}
 
 ##
 # Starts yarn resourcemanager service.
