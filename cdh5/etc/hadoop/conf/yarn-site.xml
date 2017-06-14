@@ -1,10 +1,5 @@
-{%- set namenode_fqdn = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.namenode', 'grains.items', 'compound').values()[0]['fqdn'] -%}
-{%- set standby = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.standby-namenode', 'grains.items', 'compound') -%}
-{%- set zookeepers = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.zookeeper', 'grains.items', 'compound').values() -%}
-{%- if standby -%}
-    {%- set standby_items = standby.values()[0] -%}
-    {%- set standby_fqdn = standby_items['fqdn'] -%}
-{%- endif -%}
+{%- set namenode_fqdn = grains.namespace ~ '.' ~ pillar.tld %}
+{%- set standby = 'cdh5.hadoop.standby-namenode' in grains['roles'] %}
 <?xml version="1.0"?>
 <configuration>
     <property>
@@ -169,7 +164,7 @@
     </property>
     <property>
         <name>yarn.resourcemanager.zk-address</name>
-        <value>{% for zk in zookeepers %}{{ zk['fqdn'] }}{% if not loop.last %},{% endif %}{% endfor %}</value>
+        <value>{{ namenode_fqdn }}</value>
     </property>
     {% else %}
     <property>

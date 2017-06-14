@@ -1,4 +1,4 @@
-{%- set namenode_fqdn = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.namenode', 'grains.items', 'compound').values()[0]['fqdn'] -%}
+{%- set namenode_fqdn = grains.namespace ~ '.' ~ pillar.tld %}
 <?xml version="1.0"?>
 <configuration>
     <property>

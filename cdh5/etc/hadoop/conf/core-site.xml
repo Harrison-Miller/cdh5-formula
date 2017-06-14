@@ -1,7 +1,6 @@
-{%- set standby = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.standby-namenode', 'grains.items', 'compound') -%}
-{%- set kms = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.kms', 'grains.items', 'compound') -%}
-{%- set namenode_fqdn = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.namenode', 'grains.items', 'compound').values()[0]['fqdn'] -%}
-{%- set zookeepers = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.zookeeper', 'grains.items', 'compound').values() -%}
+{%- set standby = 'cdh5.hadoop.standby-namenode' in grains['roles'] %}
+{%- set kms = 'cdh5.hadoop.kms' in grains['roles'] %}
+{%- set namenode_fqdn = grains.namespace ~ '.' ~ pillar.tld %}
 {%- if kms -%}
     {%- set kms_items = kms.values()[0] -%}
     {%- set kms_fqdn = kms_items['fqdn'] -%}
@@ -29,7 +28,7 @@
     <!-- set up the zookeeper quorum -->
     <property>
         <name>ha.zookeeper.quorum</name>
-        <value>{% for zk in zookeepers %}{{ zk['fqdn'] }}{% if not loop.last %},{% endif %}{% endfor %}</value>
+        <value>{{ namenode_fqdn }}</value>
     </property>
     {%- else %}
     <!-- Otherwise just use the nn fqdn + port -->
@@ -92,14 +91,14 @@
     </property>
 
     <!-- Rack-awareness properties -->
-    <property>
+    <!-- <property>
         <name>net.topology.node.switch.mapping.impl</name>
         <value>org.apache.hadoop.net.TableMapping</value>
     </property>
     <property>
         <name>net.topology.table.file.name</name>
         <value>/etc/hadoop/conf/host-rack.map</value>
-    </property>
+    </property> -->
 
     {%- if pillar.cdh5.security.enable %}
     {%- from 'krb5/settings.sls' import krb5 with context %}

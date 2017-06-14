@@ -1,11 +1,6 @@
-{%- set standby = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.standby-namenode', 'grains.items', 'compound') -%}
-{%- set kms = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.kms', 'grains.items', 'compound') -%}
-{%- set namenode_fqdn = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.namenode', 'grains.items', 'compound').values()[0]['fqdn'] -%}
-{%- if standby -%}
-    {%- set standby_items = standby.values()[0] -%}
-    {%- set standby_fqdn = standby_items['fqdn'] -%}
-    {%- set journal_nodes = salt['mine.get']('G@stack_id:' ~ grains.stack_id ~ ' and G@roles:cdh5.hadoop.journalnode', 'grains.items', 'compound').values() -%}
-{%- endif -%}
+{%- set standby = 'cdh5.hadoop.standby-namenode' in grains['roles'] %}
+{%- set kms = 'cdh5.hadoop.kms' in grains['roles'] %}
+{%- set namenode_fqdn = grains.namespace ~ '.' ~ pillar.tld %}
 {%- if kms -%}
     {%- set kms_items = kms.values()[0] -%}
     {%- set kms_fqdn = kms_items['fqdn'] -%}
@@ -115,22 +110,22 @@
         <name>dfs.namenode.rpc-address.{{ grains.namespace }}.nn1</name>
         <value>{{ namenode_fqdn }}:8020</value>
     </property>
-    <property>
+    <!--<property>
         <name>dfs.namenode.rpc-address.{{ grains.namespace }}.nn2</name>
         <value>{{ standby_fqdn }}:8020</value>
-    </property>
+    </property>-->
     <property>
         <name>dfs.namenode.http-address.{{ grains.namespace }}.nn1</name>
         <value>{{ namenode_fqdn }}:50070</value>
     </property>
-    <property>
+    <!--<property>
         <name>dfs.namenode.http-address.{{ grains.namespace }}.nn2</name>
         <value>{{ standby_fqdn }}:50070</value>
-    </property>
-    <property>
+    </property>-->
+    <!--<property>
         <name>dfs.namenode.shared.edits.dir</name>
         <value>qjournal://{% for j in journal_nodes %}{{ j['fqdn'] }}:8485{% if not loop.last %};{% endif %}{% endfor %}/{{ grains.namespace }}</value>
-    </property>
+    </property>-->
     <property>
         <name>dfs.journalnode.edits.dir</name>
         <value>{{ pillar.cdh5.dfs.journal_dir }}</value>
