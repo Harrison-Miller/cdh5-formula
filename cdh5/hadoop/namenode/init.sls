@@ -3,7 +3,7 @@
 {% set mapred_system_dir = salt['pillar.get']('cdh5:mapred:system_dir', '/hadoop/system/mapred') %}
 {% set mapred_staging_dir = '/user/history' %}
 {% set mapred_log_dir = '/var/log/hadoop-yarn' %}
-{% set standby = grains['roles']['cdh5.hadoop.standby-namenode'] %}
+{% set standby = 'cdh5.hadoop.standby-namenode' in grains['roles'] %}
 
 ##
 # Adding high-availability to the mix makes things a bit more complicated.

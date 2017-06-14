@@ -1,5 +1,5 @@
-{% set standby = grains['roles']['cdh5.hadoop.standby-namenode'] %}
-{% set kms = grains['roles']['cdh5.hadoop.kms'] %}
+{% set standby = 'cdh5.hadoop.standby-namenode in grains['roles'] %}
+{% set kms = 'cdh5.hadoop.kms' in grains['roles'] %}
 {% set dfs_name_dir = salt['pillar.get']('cdh5:dfs:name_dir', '/mnt/hadoop/hdfs/nn') %}
 {% set mapred_local_dir = salt['pillar.get']('cdh5:mapred:local_dir', '/mnt/hadoop/mapred/local') %}
 {% set mapred_system_dir = salt['pillar.get']('cdh5:mapred:system_dir', '/hadoop/system/mapred') %}
