@@ -178,7 +178,7 @@ create_mapred_zone:
 {% endif %}
 
 # create a user directory for each user
-{% for user_obj in pillar.__stackdio__.users %}
+{% set user_obj = salt['pillar.get']('user') %}
 {% set user = user_obj.username %}
 hdfs_dir_{{ user }}:
   cmd:
